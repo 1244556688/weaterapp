@@ -23,7 +23,7 @@ jobs:
       - name: 安裝 Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: stable
+          channel: stable
 
       - name: 補完整 Flutter 專案
         run: flutter create .
