@@ -1,0 +1,41 @@
+name: Flutter APK Build
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 下載專案
+        uses: actions/checkout@v4
+
+      - name: 安裝 Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: 安裝 Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: stable
+
+      - name: 補完整 Flutter 專案
+        run: flutter create .
+
+      - name: 安裝套件
+        run: flutter pub get
+
+      - name: 建立 Release APK
+        run: flutter build apk --release
+
+      - name: 上傳 APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: weather-app-release
+          path: build/app/outputs/flutter-apk/app-release.apk
