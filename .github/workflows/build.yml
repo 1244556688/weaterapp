@@ -1,4 +1,4 @@
-name: Flutter APK Build
+name: Build APK
 
 on:
   push:
@@ -11,31 +11,35 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 下載專案
+      - name: Checkout 程式碼
         uses: actions/checkout@v4
 
-      - name: 安裝 Java
+      - name: 安裝 Java 17
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 17
+          java-version: '17'
 
       - name: 安裝 Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: stable
+          flutter-version: '3.29.3'
 
-      - name: 補完整 Flutter 專案
+      - name: 檢查 Flutter
+        run: flutter --version
+
+      - name: 建立 Android 專案結構
         run: flutter create .
 
       - name: 安裝套件
         run: flutter pub get
 
-      - name: 建立 Release APK
+      - name: 打包 APK
         run: flutter build apk --release
 
       - name: 上傳 APK
         uses: actions/upload-artifact@v4
         with:
-          name: weather-app-release
+          name: app-release
           path: build/app/outputs/flutter-apk/app-release.apk
